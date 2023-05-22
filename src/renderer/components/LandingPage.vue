@@ -41,9 +41,6 @@
           <el-button type="primary" round @click="StopServer">
             {{ $t("buttons.stopServer") }}
           </el-button>
-          <el-button type="primary" round @click="getMessage">
-            {{ $t("buttons.viewMessage") }}
-          </el-button>
           <el-button type="primary" round @click="crash">
             {{ $t("buttons.simulatedCrash") }}
           </el-button>
@@ -100,14 +97,13 @@
 <script setup lang="ts">
 import SystemInformation from "./LandingPage/SystemInformation.vue";
 import UpdateProgress from "./updataProgress/index.vue";
-import { message } from "@renderer/api/login";
+import API from "@renderer/api/api";
 import logo from "@renderer/assets/logo.png";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { onUnmounted, Ref, ref } from "vue";
 import { i18n, setLanguage } from "@renderer/i18n";
 
 import useStoreTemplate from "@store/template";
-import TitleBar from "./common/TitleBar.vue";
 
 const storeTemplate = useStoreTemplate();
 
@@ -169,13 +165,6 @@ function openNewWin() {
     url: "/form/index",
   };
   ipcRenderer.invoke("open-win", data);
-}
-function getMessage() {
-  message().then((res) => {
-    ElMessageBox.alert(res.data, "提示", {
-      confirmButtonText: "确定",
-    });
-  });
 }
 function StopServer() {
   ipcRenderer.invoke("stop-server").then((res) => {
@@ -312,7 +301,10 @@ ipcRenderer.on("hot-update-status", (event, msg) => {
       ElMessage.success("成功,请重启");
       break;
     case "failed":
-      ElMessage.error(msg.message.message);
+      ElMessage.error({
+        message: msg.message.message,
+        offset: 100
+      });
       break;
 
     default:

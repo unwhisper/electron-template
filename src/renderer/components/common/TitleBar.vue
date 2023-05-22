@@ -41,7 +41,7 @@ import { ref } from "vue";
 const { ipcRenderer } = require("electron");
 
 const IsUseSysTitle = ref(false);
-const mix = ref(true);
+const mix = ref(false);
 const isNotMac = ref(process.platform !== "darwin");
 const IsWeb = ref(process.env.BUILD_TARGET);
 const title = ref('title')

@@ -1,9 +1,9 @@
 {
-  "name": "electron-vite-template",
+  "name": "electron-vite",
   "version": "1.0.0",
   "main": "./dist/electron/main/main.js",
-  "author": "sky <https://github.com/umbrella22>",
-  "description": "electron-vite-template project",
+  "author": "whisper",
+  "description": "electron-vite-vue-template",
   "license": "MIT",
   "scripts": {
     "dev": "node .electron-vite/dev-runner.js",
@@ -43,7 +43,7 @@
     "chalk": "4.1.2",
     "cross-env": "^7.0.3",
     "del": "^6.0.0",
-    "electron": "^18.0.4",
+    "electron": "^24.3.1",
     "electron-builder": "^23.0.3",
     "electron-devtools-vendor": "^1.0.5",
     "electron_updater_node_cli": "^0.1.3",

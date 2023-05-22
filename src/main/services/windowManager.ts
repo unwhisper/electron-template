@@ -1,7 +1,7 @@
 import setIpc from './ipcMain'
 import config from '@config/index'
 import menuconfig from '../config/menu'
-import { app, BrowserWindow, Menu, dialog, globalShortcut } from 'electron'
+import { app, BrowserWindow, Menu, dialog } from 'electron'
 import { winURL, loadingURL } from '../config/StaticPath'
 import { mainWindowConfig } from "../config/windowsConfig"
 
@@ -18,11 +18,13 @@ class MainInit {
     if (process.env.NODE_ENV === 'development') {
       menuconfig.push({
         label: '开发者设置',
-        submenu: [{
-          label: '切换到开发者模式',
-          accelerator: 'CmdOrCtrl+I',
-          role: 'toggledevtools'
-        }]
+        submenu: [
+          {
+            label: '切换到开发者模式',
+            accelerator: 'CmdOrCtrl+Shift+I',
+            role: 'toggledevtools'
+          }
+        ]
       })
     }
     // 启用协议
@@ -42,18 +44,13 @@ class MainInit {
     this.mainWindow.loadURL(this.winURL)
     // ready-to-show之后显示界面
     this.mainWindow.once('ready-to-show', () => {
+      // this.mainWindow.maximize()
       this.mainWindow.show()
-      this.mainWindow.maximize()
       // 开发模式下自动开启devtools
       if (process.env.NODE_ENV === 'development') {
         this.mainWindow.webContents.openDevTools()
       }
       if (config.UseStartupChart) this.loadWindow.destroy()
-      globalShortcut.register('Ctrl+F12', () => {
-        if(this.mainWindow.isFocused() == true){
-          this.mainWindow.webContents.openDevTools();
-        }
-      });
     })
     this.mainWindow.on('maximize', () => {
       this.mainWindow.webContents.send('isMax', true)
@@ -61,6 +58,22 @@ class MainInit {
     this.mainWindow.on('unmaximize', () => {
       this.mainWindow.webContents.send('isMax', false)
     })
+
+    // 限制只可以打开一个应用 4.0+
+    const gotTheLock = app.requestSingleInstanceLock()
+    if (!gotTheLock) {
+      app.quit()
+      app.exit()
+    } else {
+      app.on('second-instance', (event, commandLine, workingDirectory) => {
+        // 当运行第二个实例时,将会聚焦到mainWindow这个窗口
+        if (this.mainWindow) {
+          if (this.mainWindow.isMinimized()) this.mainWindow.restore()
+          this.mainWindow.focus()
+          this.mainWindow.show()
+        }
+      })
+    }
     // 当确定渲染进程卡死时，分类型进行告警操作
     app.on('render-process-gone', (event, webContents, details) => {
       const message = {

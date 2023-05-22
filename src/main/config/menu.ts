@@ -8,11 +8,11 @@ const menu = [
     label: '设置',
     submenu: [{
       label: '快速重启',
-      accelerator: 'F5',
+      accelerator: 'CmdOrCtrl+Shift+R',
       role: 'reload'
     }, {
       label: '退出',
-      accelerator: 'CmdOrCtrl+F4',
+      accelerator: 'Alt+F4',
       role: 'close'
     }]
   }, {

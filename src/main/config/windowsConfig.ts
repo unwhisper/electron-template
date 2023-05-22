@@ -3,11 +3,11 @@ import { BrowserWindowConstructorOptions } from 'electron';
 import { preloadPath } from './StaticPath';
 
 export const mainWindowConfig: BrowserWindowConstructorOptions = {
-    height: 800,
+    height: 850,
     useContentSize: true,
-    width: 1300,
-    minHeight:800,
-    minWidth:1300,
+    width: 1400,
+    minHeight: 800,
+    minWidth: 1300,
     show: false,
     frame: config.IsUseSysTitle,
     webPreferences: {
@@ -16,9 +16,9 @@ export const mainWindowConfig: BrowserWindowConstructorOptions = {
         contextIsolation: false,
         webSecurity: false,
         // 如果是开发模式可以使用devTools
-        devTools: process.env.NODE_ENV === 'development',
+        // devTools: process.env.NODE_ENV === 'development',
         // 在macos中启用橡皮动画
-        scrollBounce: process.platform === 'darwin',
+        scrollBounce: process.platform === 'darwin'
     }
 };
 
